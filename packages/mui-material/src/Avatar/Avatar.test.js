@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { expect } from 'chai';
-import { createRenderer, fireEvent, describeConformance } from '@mui-internal/test-utils';
+import { createRenderer, fireEvent } from '@mui/internal-test-utils';
 import { spy } from 'sinon';
 import Avatar, { avatarClasses as classes } from '@mui/material/Avatar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CancelIcon from '../internal/svg-icons/Cancel';
+import describeConformance from '../../test/describeConformance';
 
 describe('<Avatar />', () => {
   const { render } = createRenderer();
@@ -60,6 +61,20 @@ describe('<Avatar />', () => {
       const img = container.querySelector('img');
       fireEvent.error(img);
       expect(onError.callCount).to.equal(1);
+    });
+
+    it('should pass slots.img to `useLoaded` hook', () => {
+      const originalImage = global.Image;
+      const image = {};
+      global.Image = function Image() {
+        return image;
+      };
+
+      render(<Avatar src="/fake.png" slotProps={{ img: { crossOrigin: 'anonymous' } }} />);
+
+      expect(image.crossOrigin).to.equal('anonymous');
+
+      global.Image = originalImage;
     });
   });
 

@@ -6,9 +6,17 @@ import glob from 'fast-glob';
 const packagePath = process.cwd();
 const buildPath = path.join(packagePath, './build');
 
-export async function includeFileInBuild(file) {
+/**
+ * Copies a file into the build directory. By default it copies it under the same
+ * base name in the root, but you can provide a second argument to specify a
+ * different subpath.
+ * @param {string} file source file path
+ * @param {string=} target target file path
+ * @returns {Promise<void>}
+ */
+export async function includeFileInBuild(file, target = path.basename(file)) {
   const sourcePath = path.resolve(packagePath, file);
-  const targetPath = path.resolve(buildPath, path.basename(file));
+  const targetPath = path.resolve(buildPath, target);
   await fse.copy(sourcePath, targetPath);
   console.log(`Copied ${sourcePath} to ${targetPath}`);
 }
@@ -20,6 +28,7 @@ export async function includeFileInBuild(file) {
  *
  * It also tests that an this import can be used in TypeScript by checking
  * if an index.d.ts is present at that path.
+ * TODO: kept around for backwards compatibility, remove once X is on ESM-exports package layout
  * @param {object} param0
  * @param {string} param0.from
  * @param {string} param0.to
@@ -83,25 +92,117 @@ export async function typescriptCopy({ from, to }) {
   return Promise.all(cmds);
 }
 
-export async function createPackageFile() {
+export async function cjsCopy({ from, to }) {
+  if (!(await fse.pathExists(to))) {
+    console.warn(`path ${to} does not exists`);
+    return [];
+  }
+
+  const files = await glob('**/*.cjs', { cwd: from });
+  const cmds = files.map((file) => fse.copy(path.resolve(from, file), path.resolve(to, file)));
+  return Promise.all(cmds);
+}
+
+const srcCondition = 'mui-src';
+const modernCondition = 'mui-modern';
+const polyfillLegacyModern = false;
+const legacyModernPrefix = './modern';
+
+function createExportFor(exportName, conditions) {
+  if (typeof conditions === 'object') {
+    const { [srcCondition]: src, ...rest } = conditions;
+    if (typeof src === 'string') {
+      if (!/\.tsx?$/.test(src)) {
+        throw new Error(`Invalid src condition for ${exportName}: ${src}`);
+      }
+      const baseName = src.replace(/^\.\/src\//, '').replace(/\.tsx?$/, '');
+      return {
+        [exportName]: {
+          require: {
+            types: `./${baseName}.d.ts`,
+            default: `./${baseName}.js`,
+          },
+          import: {
+            types: `./esm/${baseName}.d.ts`,
+            default: `./esm/${baseName}.js`,
+          },
+          [modernCondition]: {
+            types: `./modern/${baseName}.d.ts`,
+            default: `./modern/${baseName}.js`,
+          },
+          ...rest,
+        },
+      };
+    }
+  }
+
+  if (typeof conditions === 'string' && /\.tsx?$/.test(conditions)) {
+    return createExportFor(exportName, { [srcCondition]: conditions });
+  }
+
+  return {
+    [exportName]: conditions,
+  };
+}
+
+// TODO: remove useEsmExports paramater once X is on the ESM-exports package layout (default to true)
+export async function createPackageFile(useEsmExports = false) {
   const packageData = await fse.readFile(path.resolve(packagePath, './package.json'), 'utf8');
   const { nyc, scripts, devDependencies, workspaces, ...packageDataOther } =
     JSON.parse(packageData);
 
-  const newPackageData = {
-    ...packageDataOther,
-    private: false,
-    ...(packageDataOther.main
-      ? {
-          main: fse.existsSync(path.resolve(buildPath, './node/index.js'))
-            ? './node/index.js'
-            : './index.js',
-          module: fse.existsSync(path.resolve(buildPath, './esm/index.js'))
-            ? './esm/index.js'
-            : './index.js',
-        }
-      : {}),
+  const packageExports = {
+    ...createExportFor('.', { [srcCondition]: './src/index.ts' }),
+    ...createExportFor('./*', { [srcCondition]: './src/*/index.ts' }),
   };
+
+  if (packageDataOther.exports) {
+    for (const [exportName, conditions] of Object.entries(packageDataOther.exports)) {
+      if (conditions) {
+        Object.assign(packageExports, createExportFor(exportName, conditions));
+      } else {
+        delete packageExports[exportName];
+      }
+    }
+  }
+
+  if (polyfillLegacyModern) {
+    const exportedNames = new Set(Object.keys(packageExports));
+    for (const exportedName of exportedNames) {
+      const modernName = exportedName.replace(/^\./, legacyModernPrefix);
+      const modernExport = packageExports[exportedName][modernCondition] ?? null;
+      if (modernExport && !exportedNames.has(modernName)) {
+        packageExports[modernName] = modernExport;
+      }
+    }
+  }
+
+  const newPackageData = useEsmExports
+    ? {
+        ...packageDataOther,
+        private: false,
+        ...(packageDataOther.main
+          ? {
+              main: './index.js',
+              module: './esm/index.js',
+            }
+          : {}),
+        exports: packageExports,
+      }
+    : {
+        ...packageDataOther,
+        private: false,
+        ...(packageDataOther.main
+          ? {
+              main: fse.existsSync(path.resolve(buildPath, './node/index.js'))
+                ? './node/index.js'
+                : './index.js',
+              module: fse.existsSync(path.resolve(buildPath, './esm/index.js'))
+                ? './esm/index.js'
+                : './index.js',
+            }
+          : {}),
+      };
 
   const typeDefinitionsFilePath = path.resolve(buildPath, './index.d.ts');
   if (await fse.pathExists(typeDefinitionsFilePath)) {

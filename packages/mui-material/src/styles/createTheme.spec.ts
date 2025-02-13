@@ -148,6 +148,23 @@ const theme = createTheme();
           },
         },
       },
+      MuiRadioGroup: {
+        styleOverrides: {
+          row: {
+            justifyContent: 'space-between',
+          },
+        },
+      },
+      MuiGrid2: {
+        styleOverrides: {
+          root: {
+            justifyContent: 'space-between',
+          },
+          container: {
+            justifyContent: 'space-between',
+          },
+        },
+      },
     },
   });
 }
@@ -210,11 +227,39 @@ const theme = createTheme();
   });
 }
 
+// props callback in variants
+{
+  createTheme({
+    components: {
+      MuiButton: {
+        variants: [
+          {
+            props: (props) => props.color !== 'secondary',
+            style: ({ theme: { palette } }) => ({
+              backgroundColor: palette.grey[500],
+            }),
+          },
+        ],
+      },
+    },
+  });
+}
+
 {
   createTheme({
     shape: {
       // @ts-expect-error invalid borderRadius string value in theme
       borderRadius: '5px',
+    },
+  });
+}
+
+// CSS variables for shadow DOM
+{
+  createTheme({
+    cssVariables: {
+      rootSelector: ':host',
+      colorSchemeSelector: 'class',
     },
   });
 }

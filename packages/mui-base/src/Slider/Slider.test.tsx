@@ -1,20 +1,14 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import { spy, stub } from 'sinon';
-import {
-  act,
-  createRenderer,
-  createMount,
-  describeConformanceUnstyled,
-  fireEvent,
-  screen,
-} from '@mui-internal/test-utils';
+import { act, createRenderer, fireEvent, screen } from '@mui/internal-test-utils';
 import {
   Slider,
   sliderClasses as classes,
   SliderRootSlotProps,
   SliderValueLabelSlotProps,
 } from '@mui/base/Slider';
+import { describeConformanceUnstyled } from '../../test/describeConformanceUnstyled';
 
 type Touches = Array<Pick<Touch, 'identifier' | 'clientX' | 'clientY'>>;
 
@@ -37,14 +31,12 @@ describe('<Slider />', () => {
     }
   });
 
-  const mount = createMount();
   const { render } = createRenderer();
 
   describeConformanceUnstyled(<Slider value={0} />, () => ({
     classes,
     inheritComponent: 'span',
     render,
-    mount,
     refInstanceof: window.HTMLSpanElement,
     testComponentPropWith: 'div',
     slots: {
@@ -142,7 +134,7 @@ describe('<Slider />', () => {
       expect(slider).to.have.property('tagName', 'INPUT');
       expect(slider).to.have.property('type', 'range');
       // Only relevant if we implement `[role="slider"]` with `input[type="range"]`
-      // We're not setting this by default because it changes horizontal keyboard navigation in WebKit: https://bugs.chromium.org/p/chromium/issues/detail?id=1162640
+      // We're not setting this by default because it changes horizontal keyboard navigation in WebKit: https://issues.chromium.org/issues/40739626
       expect(slider).not.toHaveComputedStyle({ webkitAppearance: 'slider-vertical' });
     });
   });
@@ -374,7 +366,12 @@ describe('<Slider />', () => {
       expect(screen.getByTestId('value-label')).to.have.text('20');
     });
 
-    it('should provide focused state to the slotProps.thumb', () => {
+    it('should provide focused state to the slotProps.thumb', function test() {
+      if (/jsdom/.test(window.navigator.userAgent)) {
+        // JSDOM doesn't support :focus-visible
+        this.skip();
+      }
+
       const { getByTestId } = render(
         <Slider
           defaultValue={[20, 40]}

@@ -30,18 +30,16 @@ To use styled-components, you need to configure your bundler to replace it with 
 
 If you're using yarn, you can configure it using a package resolution:
 
-**package.json**
+<!-- #npm-tag-reference -->
 
-<!-- #default-branch-switch -->
-
-```diff
+```diff title="package.json"
  {
    "dependencies": {
--    "@mui/styled-engine": "latest"
-+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+-    "@mui/styled-engine": "next"
++    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
    },
 +  "resolutions": {
-+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
++    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
 +  },
  }
 ```
@@ -49,11 +47,9 @@ If you're using yarn, you can configure it using a package resolution:
 ### With npm
 
 Because package resolutions aren't available with npm, you must update your bundler's config to add this alias.
-The example below shows how to do this with Webpack:
+The example below shows how to do this with webpack:
 
-**webpack.config.js**
-
-```diff
+```diff title="webpack.config.js"
  module.exports = {
    //...
 +  resolve: {
@@ -66,9 +62,7 @@ The example below shows how to do this with Webpack:
 
 For TypeScript, you must also update the `tsconfig.json` as shown here:
 
-**tsconfig.json**
-
-```diff
+```diff title="tsconfig.json"
  {
    "compilerOptions": {
 +    "paths": {
@@ -80,9 +74,7 @@ For TypeScript, you must also update the `tsconfig.json` as shown here:
 
 ### Next.js
 
-**next.config.js**
-
-```diff
+```diff title="next.config.js"
 +const withTM = require('next-transpile-modules')([
 +  '@mui/material',
 +  '@mui/system',
@@ -101,16 +93,14 @@ For TypeScript, you must also update the `tsconfig.json` as shown here:
 ```
 
 :::info
-**Versions compatibility**
-
-To ensure compatibility, it's essential to align the major version of `@mui/styled-engine-sc` with that of the `styled-components` package you're using. For instance, if you opt for `styled-components` version 5, it's necessary to use `@mui/styled-engine-sc` version 5. Similarly, if your preference is `styled-components` version 6, you'll need to upgrade `@mui/styled-engine-sc` to its version 6, which is currently in an alpha state.
+**Versions compatibility**: To ensure compatibility, it's essential to align the major version of `@mui/styled-engine-sc` with that of the `styled-components` package you're using. For instance, if you opt for `styled-components` version 5, it's necessary to use `@mui/styled-engine-sc` version 5. Similarly, if your preference is `styled-components` version 6, you'll need to upgrade `@mui/styled-engine-sc` to its version 6, which is currently in an alpha state.
 :::
 
 ## Ready-to-use examples
 
 We provide boilerplate examples of Create React App with Material UI and styled-components in both JavaScript and TypeScript:
 
-<!-- #default-branch-switch -->
+<!-- #repo-reference -->
 
 - [Material UI + CRA + styled-components (JavaScript)](https://github.com/mui/material-ui/tree/master/examples/material-ui-cra-styled-components)
 - [Material UI + CRA + styled-components (TypeScript)](https://github.com/mui/material-ui/tree/master/examples/material-ui-cra-styled-components-ts)

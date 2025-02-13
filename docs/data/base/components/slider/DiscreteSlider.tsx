@@ -21,7 +21,7 @@ export default function DiscreteSlider() {
 }
 
 interface SliderValueLabelProps {
-  children: React.ReactElement;
+  children: React.ReactElement<any>;
 }
 
 function SliderValueLabel({ children }: SliderValueLabelProps) {
@@ -150,7 +150,7 @@ const Slider = styled(BaseSlider)(
   }
 
   & .valueLabel {
-    font-family: IBM Plex Sans;
+    font-family: "IBM Plex Sans", sans-serif;
     font-weight: 600;
     font-size: 12px;
     position: relative;

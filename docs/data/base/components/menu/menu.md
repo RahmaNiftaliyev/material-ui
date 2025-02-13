@@ -5,19 +5,21 @@ components: Menu, MenuItem, MenuButton, Dropdown
 hooks: useMenu, useMenuItem, useMenuButton, useDropdown, useMenuItemContextStabilizer
 githubLabel: 'component: menu'
 waiAria: https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/
+newUrl: https://base-ui.com/react/components/menu
+newName: Menu
 ---
 
 # Menu
 
 <p class="description">The Dropdown Menu components provide end users with a list of options on temporary surfaces.</p>
 
-{{"component": "modules/components/ComponentLinkHeader.js", "design": false}}
+{{"component": "@mui/docs/ComponentLinkHeader", "design": false}}
 
 {{"component": "modules/components/ComponentPageTabs.js"}}
 
 ## Introduction
 
-The Base UI Dropdown Menu is implemented using a collection of related components:
+The MUI Base Dropdown Menu is implemented using a collection of related components:
 
 - Dropdown - The outermost container that houses all Menu components.
 - Menu Button - The button that toggles the visibility of the Menu.
@@ -166,7 +168,7 @@ The `useMenuItemContextStabilizer` hook ensures that the context value changes o
 
 :::info
 The following features can be used with both components and hooks.
-For the sake of simplicity, demos and code snippets primarily feature components.
+For the sake of simplicity, demos, and code snippets primarily feature components.
 :::
 
 ### Wrapping Menu Items

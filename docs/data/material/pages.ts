@@ -106,25 +106,30 @@ const pages: MuiPage[] = [
         children: [
           { pathname: '/material-ui/react-box' },
           { pathname: '/material-ui/react-container' },
-          { pathname: '/material-ui/react-grid' },
-          { pathname: '/material-ui/react-grid2', title: 'Grid v2', newFeature: true },
+          { pathname: '/material-ui/react-grid', deprecated: true },
+          { pathname: '/material-ui/react-grid2', title: 'Grid v2' },
           { pathname: '/material-ui/react-stack' },
           { pathname: '/material-ui/react-image-list', title: 'Image List' },
-          { pathname: '/material-ui/react-hidden' },
         ],
       },
       {
         pathname: '/material-ui/components/utils',
         subheader: 'utils',
         children: [
-          { pathname: '/material-ui/react-click-away-listener', title: 'Click-Away Listener' },
+          {
+            pathname: '/material-ui/react-click-away-listener',
+            title: 'Click-Away Listener',
+          },
           { pathname: '/material-ui/react-css-baseline', title: 'CSS Baseline' },
           { pathname: '/material-ui/react-modal' },
           { pathname: '/material-ui/react-no-ssr', title: 'No SSR' },
           { pathname: '/material-ui/react-popover' },
           { pathname: '/material-ui/react-popper' },
           { pathname: '/material-ui/react-portal' },
-          { pathname: '/material-ui/react-textarea-autosize', title: 'Textarea Autosize' },
+          {
+            pathname: '/material-ui/react-textarea-autosize',
+            title: 'Textarea Autosize',
+          },
           { pathname: '/material-ui/transitions' },
           { pathname: '/material-ui/react-use-media-query', title: 'useMediaQuery' },
         ],
@@ -134,9 +139,25 @@ const pages: MuiPage[] = [
         subheader: 'MUI X',
         children: [
           { pathname: '/x/react-data-grid', title: 'Data Grid' },
-          { pathname: '/x/react-date-pickers', title: 'Date & Time Pickers' },
+          { pathname: '/x/react-date-pickers', title: 'Date and Time Pickers' },
           { pathname: '/x/react-charts' },
           { pathname: '/x/react-tree-view', title: 'Tree View' },
+        ],
+      },
+      {
+        pathname: '/toolpad', // the pathname does not matter here because the links to Toolpad are outbound.
+        subheader: 'Toolpad Core',
+        children: [
+          {
+            pathname: '/toolpad/core/react-dashboard-layout/',
+            title: 'Dashboard Layout',
+            newFeature: true,
+          },
+          {
+            pathname: '/toolpad/core/react-sign-in-page/',
+            title: 'Sign-in Page',
+            newFeature: true,
+          },
         ],
       },
       {
@@ -184,9 +205,29 @@ const pages: MuiPage[] = [
           { pathname: '/material-ui/customization/typography' },
           { pathname: '/material-ui/customization/spacing' },
           { pathname: '/material-ui/customization/breakpoints' },
+          {
+            pathname: '/material-ui/customization/container-queries',
+            newFeature: true,
+          },
           { pathname: '/material-ui/customization/density' },
           { pathname: '/material-ui/customization/z-index', title: 'z-index' },
           { pathname: '/material-ui/customization/transitions' },
+        ],
+      },
+      {
+        pathname: '/material-ui/customization/css-variables',
+        subheader: '/material-ui/customization/css-variables',
+        newFeature: true,
+        children: [
+          { pathname: '/material-ui/customization/css-theme-variables/overview' },
+          {
+            pathname: '/material-ui/customization/css-theme-variables/usage',
+            title: 'Basic usage',
+          },
+          {
+            pathname: '/material-ui/customization/css-theme-variables/configuration',
+            title: 'Advanced configuration',
+          },
         ],
       },
     ],
@@ -195,11 +236,6 @@ const pages: MuiPage[] = [
     pathname: '/material-ui/guides',
     title: 'How-to guides',
     children: [
-      {
-        pathname: '/material-ui/guides/material-3-components',
-        title: 'Material 3 components',
-        newFeature: true,
-      },
       { pathname: '/material-ui/guides/minimizing-bundle-size' },
       { pathname: '/material-ui/guides/server-rendering' },
       { pathname: '/material-ui/guides/responsive-ui', title: 'Responsive UI' },
@@ -243,19 +279,7 @@ const pages: MuiPage[] = [
         pathname: '/material-ui/experimental-api/classname-generator',
         title: 'ClassName generator',
       },
-      {
-        pathname: '/material-ui/experimental-api/css-theme-variables',
-        subheader: 'CSS theme variables',
-        children: [
-          { pathname: '/material-ui/experimental-api/css-theme-variables/overview' },
-          { pathname: '/material-ui/experimental-api/css-theme-variables/usage' },
-          { pathname: '/material-ui/experimental-api/css-theme-variables/customization' },
-          {
-            pathname: '/material-ui/experimental-api/css-theme-variables/migration',
-            title: 'Migrating to CSS variables',
-          },
-        ],
-      },
+      { pathname: '/material-ui/experimental-api/pigment-css', title: 'Pigment CSS' },
     ],
   },
   {
@@ -263,16 +287,40 @@ const pages: MuiPage[] = [
     title: 'Migration',
     children: [
       {
-        pathname: '/material-ui/migration/migrating-from-deprecated-apis',
-        title: 'Migrating from deprecated APIs',
-      },
-      {
         pathname: '/material-ui/migration/migration-grid-v2',
         title: 'Migrating to Grid v2',
       },
       {
         pathname: '/material-ui/migration/pickers-migration',
         title: 'Migration from @material-ui/pickers',
+      },
+      {
+        pathname: '/material-ui/migration/v7',
+        subheader: 'Upgrade to v7',
+        children: [
+          {
+            pathname: '/material-ui/migration/upgrade-to-v7',
+            title: 'Upgrade to v7: getting started',
+          },
+        ],
+      },
+      {
+        pathname: '/material-ui/migration/v6',
+        subheader: 'Upgrade to v6',
+        children: [
+          {
+            pathname: '/material-ui/migration/upgrade-to-v6',
+            title: 'Upgrade to v6: getting started',
+          },
+          {
+            pathname: '/material-ui/migration/migrating-from-deprecated-apis',
+            title: 'Migrating from deprecated APIs',
+          },
+          {
+            pathname: '/material-ui/migration/migrating-to-pigment-css',
+            title: 'Migrating to Pigment CSS',
+          },
+        ],
       },
       {
         pathname: '/material-ui/migration/v5',
@@ -315,11 +363,25 @@ const pages: MuiPage[] = [
     children: [
       { pathname: '/material-ui/discover-more/showcase' },
       { pathname: '/material-ui/discover-more/related-projects' },
-      { pathname: '/material-ui/discover-more/design-kits' },
       { pathname: '/material-ui/discover-more/roadmap' },
       { pathname: '/material-ui/discover-more/backers', title: 'Sponsors and Backers' },
       { pathname: '/material-ui/discover-more/vision' },
       { pathname: '/material-ui/discover-more/changelog' },
+    ],
+  },
+  {
+    pathname: '/material-ui/design-resources',
+    title: 'Design resources',
+    children: [
+      {
+        pathname: '/material-ui/design-resources/material-ui-for-figma',
+        title: 'Figma Design Kit',
+      },
+      {
+        pathname: '/material-ui/design-resources/material-ui-sync',
+        title: 'Figma Sync plugin',
+        unstable: true,
+      },
     ],
   },
   {

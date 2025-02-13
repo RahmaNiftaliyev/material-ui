@@ -3,14 +3,14 @@ productId: joy-ui
 title: React Slider component
 components: Slider
 githubLabel: 'component: slider'
-unstyled: /base-ui/react-slider/
+unstyled: https://base-ui.com/react/components/slider
 ---
 
 # Slider
 
 <p class="description">Slider generates a background element that can be used for various purposes.</p>
 
-{{"component": "modules/components/ComponentLinkHeader.js"}}
+{{"component": "@mui/docs/ComponentLinkHeader"}}
 
 ## Introduction
 
